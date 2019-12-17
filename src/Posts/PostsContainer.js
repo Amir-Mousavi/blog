@@ -4,29 +4,55 @@ import { fetchPosts } from "./actions/postsAction";
 
 import PostList from "./components/PostList";
 import { PostHeader } from "./components/styled.components";
+import Pagination from "./components/Pagination";
 
 class PostsContainer extends Component {
+  state = { _limit: 5, _page: 1 };
   componentDidMount() {
-    this.props.fetchPosts();
+    this.fetchPosts();
   }
 
+  get filters() {
+    const { _limit, _page } = this.state;
+
+    return { _limit, _page };
+  }
+
+  fetchPosts = () => this.props.fetchPosts(this.filters);
+
+  onPageChange = newPage => this.setState({ _page: newPage }, this.fetchPosts);
+
   render() {
-    const { posts } = this.props;
+    const { posts, count } = this.props;
+    const { _page, _limit } = this.state;
+    const { onPageChange } = this;
+
+    const PaginationComponent = (
+      <Pagination
+        count={count}
+        onPageChange={onPageChange}
+        page={_page}
+        limit={_limit}
+      />
+    );
     return (
       <div>
         <PostHeader>
           <h1>Posts</h1>
         </PostHeader>
-        <PostList posts={posts} />;
+        {PaginationComponent}
+        <PostList posts={posts} />
+        {PaginationComponent}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ posts, fetching, error }) => ({
+const mapStateToProps = ({ posts, fetching, error, count }) => ({
   posts,
   fetching,
-  error
+  error,
+  count
 });
 
 const mapDispatchToProps = {
