@@ -8,12 +8,20 @@ const handleSuccess = ({ response, type, next, reduxData }) => {
     ...response,
     ...reduxData
   });
+
+  return new Promise((resolve, reject) => {
+    resolve(response);
+  });
 };
 
 const handleFailed = ({ error, type, next }) => {
   next({
     type,
     error
+  });
+
+  return new Promise((resolve, reject) => {
+    reject(error);
   });
 };
 
@@ -23,7 +31,7 @@ const apiMiddleware = store => next => action => {
   if (isEndpointCall) {
     next({ type });
     const { method, successType, failedTyp } = action;
-    axios(`${basedURL}${action.endpoint}`, {
+    return axios(`${basedURL}${action.endpoint}`, {
       method
     })
       .then(response =>

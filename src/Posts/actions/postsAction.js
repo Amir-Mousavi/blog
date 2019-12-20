@@ -22,3 +22,13 @@ export const deletePost = id => {
     reduxData: { id }
   };
 };
+
+export const deletePostAndFetch = (id, filter) => {
+  return dispatch => {
+    dispatch(deletePost(id)).then(response => {
+      if (response.status === 200) {
+        dispatch(fetchPosts(filter));
+      }
+    });
+  };
+};
