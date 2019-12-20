@@ -1,11 +1,12 @@
 import axios from "axios";
 const basedURL = "http://localhost:3004/";
 
-const handleSuccess = ({ response, type, next }) => {
+const handleSuccess = ({ response, type, next, reduxData }) => {
   next({
     data: response.data,
     type,
-    ...response
+    ...response,
+    ...reduxData
   });
 };
 
@@ -17,7 +18,7 @@ const handleFailed = ({ error, type, next }) => {
 };
 
 const apiMiddleware = store => next => action => {
-  const { isEndpointCall, type } = action;
+  const { isEndpointCall, type, reduxData = {} } = action;
 
   if (isEndpointCall) {
     next({ type });
@@ -25,7 +26,9 @@ const apiMiddleware = store => next => action => {
     axios(`${basedURL}${action.endpoint}`, {
       method
     })
-      .then(response => handleSuccess({ response, type: successType, next }))
+      .then(response =>
+        handleSuccess({ response, type: successType, next, reduxData })
+      )
       .catch(error => handleFailed({ error, type: failedTyp, next }));
   } else {
     next(action);

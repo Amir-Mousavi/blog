@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchPosts } from "./actions/postsAction";
+import { fetchPosts, deletePost } from "./actions/postsAction";
 
 import PostList from "./components/PostList";
 import { PostHeader } from "./components/styled.components";
@@ -23,7 +23,7 @@ class PostsContainer extends Component {
   onPageChange = newPage => this.setState({ _page: newPage }, this.fetchPosts);
 
   render() {
-    const { posts, count } = this.props;
+    const { posts, count, deletePost } = this.props;
     const { _page, _limit } = this.state;
     const { onPageChange } = this;
 
@@ -41,7 +41,7 @@ class PostsContainer extends Component {
           <h1>Posts</h1>
         </PostHeader>
         {PaginationComponent}
-        <PostList posts={posts} />
+        <PostList deletePost={deletePost} posts={posts} />
         {PaginationComponent}
       </div>
     );
@@ -56,7 +56,8 @@ const mapStateToProps = ({ posts, fetching, error, count }) => ({
 });
 
 const mapDispatchToProps = {
-  fetchPosts
+  fetchPosts,
+  deletePost
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsContainer);
