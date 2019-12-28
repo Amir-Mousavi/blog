@@ -23,6 +23,28 @@ export const deletePost = id => {
   };
 };
 
+export const editPost = postObject => {
+  return {
+    type: Types.EDIT_POST,
+    successType: Types.EDIT_POST_SUCCESS,
+    failedTyp: Types.EDIT_POST_FAILED,
+    isEndpointCall: true,
+    endpoint: `posts/${postObject.id}`,
+    method: "PATCH",
+    data: postObject
+  };
+};
+
+export const editPostAndFetch = (postObject, filters) => {
+  return dispatch => {
+    dispatch(editPost(postObject)).then(response => {
+      if (response.status === 200) {
+        dispatch(fetchPosts(filters));
+      }
+    });
+  };
+};
+
 export const deletePostAndFetch = (id, filter) => {
   return dispatch => {
     dispatch(deletePost(id)).then(response => {

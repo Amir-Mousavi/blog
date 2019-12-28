@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchPosts, deletePostAndFetch } from "./actions/postsAction";
+import {
+  fetchPosts,
+  deletePostAndFetch,
+  editPostAndFetch
+} from "./actions/postsAction";
 
 import PostList from "./components/PostList";
 import { PostHeader } from "./components/styled.components";
@@ -29,10 +33,17 @@ class PostsContainer extends Component {
     deletePostAndFetch(id, filters);
   };
 
+  editPost = postObject => {
+    const { editPostAndFetch } = this.props;
+    const { filters } = this;
+
+    editPostAndFetch(postObject, filters);
+  };
+
   render() {
     const { posts, count } = this.props;
     const { _page, _limit } = this.state;
-    const { onPageChange, deletePost } = this;
+    const { onPageChange, deletePost, editPost } = this;
 
     const PaginationComponent = (
       <Pagination
@@ -48,7 +59,7 @@ class PostsContainer extends Component {
           <h1>Posts</h1>
         </PostHeader>
         {PaginationComponent}
-        <PostList deletePost={deletePost} posts={posts} />
+        <PostList editPost={editPost} deletePost={deletePost} posts={posts} />
         {PaginationComponent}
       </div>
     );
@@ -64,6 +75,7 @@ const mapStateToProps = ({ posts, fetching, error, count }) => ({
 
 const mapDispatchToProps = {
   fetchPosts,
+  editPostAndFetch,
   deletePostAndFetch
 };
 

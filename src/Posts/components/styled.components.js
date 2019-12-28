@@ -8,6 +8,21 @@ export const PostListRoot = styled.div`
     margin: 10px;
     box-shadow: 2px 2px 4px #000;
 
+    .editDiv {
+      display: flex;
+      flex-direction: column;
+
+      input {
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      textarea {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+    }
+
     footer {
       display: flex;
       justify-content: flex-end;
@@ -23,6 +38,14 @@ export const PostListRoot = styled.div`
       }
 
       button:hover {
+        color: #333;
+      }
+
+      .edit-btn {
+        color: slategray;
+      }
+
+      .edit-btn:hover {
         color: #333;
       }
     }

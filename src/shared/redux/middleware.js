@@ -26,13 +26,14 @@ const handleFailed = ({ error, type, next }) => {
 };
 
 const apiMiddleware = store => next => action => {
-  const { isEndpointCall, type, reduxData = {} } = action;
+  const { isEndpointCall, type, reduxData = {}, data = {} } = action;
 
   if (isEndpointCall) {
     next({ type });
     const { method, successType, failedTyp } = action;
     return axios(`${basedURL}${action.endpoint}`, {
-      method
+      method,
+      data
     })
       .then(response =>
         handleSuccess({ response, type: successType, next, reduxData })
