@@ -3,12 +3,14 @@ import { connect } from "react-redux";
 import {
   fetchPosts,
   deletePostAndFetch,
-  editPostAndFetch
+  editPostAndFetch,
+  addPostAndFetch
 } from "./actions/postsAction";
 
 import PostList from "./components/PostList";
 import { PostHeader } from "./components/styled.components";
 import Pagination from "./components/Pagination";
+import AddNewPostModal from "./components/AddPost/AddNewPostModal";
 
 class PostsContainer extends Component {
   state = { _limit: 5, _page: 1 };
@@ -40,10 +42,17 @@ class PostsContainer extends Component {
     editPostAndFetch(postObject, filters);
   };
 
+  addPost = postObject => {
+    const { addPostAndFetch } = this.props;
+    const { filters } = this;
+
+    addPostAndFetch(postObject, filters);
+  };
+
   render() {
     const { posts, count } = this.props;
     const { _page, _limit } = this.state;
-    const { onPageChange, deletePost, editPost } = this;
+    const { onPageChange, deletePost, editPost, addPost } = this;
 
     const PaginationComponent = (
       <Pagination
@@ -58,6 +67,7 @@ class PostsContainer extends Component {
         <PostHeader>
           <h1>Posts</h1>
         </PostHeader>
+        <AddNewPostModal addPost={addPost} />
         {PaginationComponent}
         <PostList editPost={editPost} deletePost={deletePost} posts={posts} />
         {PaginationComponent}
@@ -76,6 +86,7 @@ const mapStateToProps = ({ posts, fetching, error, count }) => ({
 const mapDispatchToProps = {
   fetchPosts,
   editPostAndFetch,
+  addPostAndFetch,
   deletePostAndFetch
 };
 

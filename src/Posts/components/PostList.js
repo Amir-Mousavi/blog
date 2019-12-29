@@ -2,15 +2,10 @@ import React from "react";
 import PostItem from "./PostItem";
 import { PostListRoot } from "./styled.components";
 
-const PostList = ({ posts, deletePost, editPost }) => (
+const PostList = ({ posts, ...props }) => (
   <PostListRoot>
     {posts.map(post => (
-      <PostItem
-        editPost={editPost}
-        key={post.id}
-        deletePost={deletePost}
-        post={post}
-      />
+      <PostItem {...props} key={post.id} post={post} />
     ))}
   </PostListRoot>
 );
